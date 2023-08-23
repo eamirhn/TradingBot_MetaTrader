@@ -46,8 +46,8 @@ void OnTick()
       if (BuyConditionsMet())
       {
          // Calculate stop loss and take profit levels
-         stopLoss = Low[0]; // Lowest price of the entry candle
-         takeProfit = stopLoss + (stopLoss - Low[0]) * 2; // 2 times the stop loss
+         stopLoss = Low[0] - Point * 10; // Set a reasonable distance for stop loss
+         takeProfit = Low[0] + Point * 20; // Set a reasonable distance for take profit
 
          // Place buy order at market price
          buyOrderTicket = OrderSend(Symbol(), OP_BUY, lotSize, MarketInfo(Symbol(), MODE_ASK), 2, stopLoss, takeProfit, "Buy Order", 0, clrNONE);
@@ -65,8 +65,8 @@ void OnTick()
       if (SellConditionsMet())
       {
          // Calculate stop loss and take profit levels
-         stopLoss = High[0]; // Highest price of the entry candle
-         takeProfit = stopLoss - (High[0] - stopLoss) * 2; // 2 times the stop loss
+         stopLoss = High[0] + Point * 10; // Set a reasonable distance for stop loss
+         takeProfit = High[0] - Point * 20; // Set a reasonable distance for take profit
 
          // Place sell order at market price
          sellOrderTicket = OrderSend(Symbol(), OP_SELL, lotSize, MarketInfo(Symbol(), MODE_BID), 2, stopLoss, takeProfit, "Sell Order", 0, clrNONE);
@@ -94,7 +94,7 @@ bool BuyConditionsMet()
    bool isRSICrossAbove30 = iRSI(Symbol(), 0, 14, PRICE_CLOSE, 1) < 30 && iRSI(Symbol(), 0, 14, PRICE_CLOSE, 0) >= 30;
 
    // Volume Conditions
-   bool isVolumeAboveAverage = Volume[1] > iMA(Symbol(), 0, 10, 0, MODE_SMA, PRICE_CLOSE, 0);
+   bool isVolumeAboveAverage = Volume[1] > iMA(Symbol(), 0, 10, 0, MODE_SMA, PRICE_TYPICAL, 0);
 
    // Check if all conditions are met for buy trade
    return isAboveKumo && isTenkanAboveKijun && isChikouAbovePrice && isRSICrossAbove30 && isVolumeAboveAverage;
@@ -111,7 +111,7 @@ bool SellConditionsMet()
    bool isRSICrossBelow70 = iRSI(Symbol(), 0, 14, PRICE_CLOSE, 1) > 70 && iRSI(Symbol(), 0, 14, PRICE_CLOSE, 0) <= 70;
 
    // Volume Conditions
-   bool isVolumeBelowAverage = Volume[1] < iMA(Symbol(), 0, 10, 0, MODE_SMA, PRICE_CLOSE, 0);
+   bool isVolumeBelowAverage = Volume[1] < iMA(Symbol(), 0, 10, 0, MODE_SMA, PRICE_TYPICAL, 0);
 
    // Check if all conditions are met for sell trade
    return isBelowKumo && isTenkanBelowKijun && isChikouBelowPrice && isRSICrossBelow70 && isVolumeBelowAverage;
