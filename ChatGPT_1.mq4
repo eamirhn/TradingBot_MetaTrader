@@ -33,7 +33,7 @@ void OnTick()
    int currentMinute = TimeMinute(currentTime);
 
    // Check if it's within trading hours
-   if (currentHour >= TradingStartTime/100 && currentHour < TradingEndTime/100)
+   if (currentHour >= TradingStartTime / 100 && currentHour < TradingEndTime / 100)
    {
       // Calculate lot size based on risk percentage and account balance
       double lotSize = AccountBalance() * RiskPercentage / 100.0 / MarketInfo(Symbol(), MODE_MARGINREQUIRED);
